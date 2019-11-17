@@ -1,28 +1,50 @@
-import Res from '/Res.js';
-const View = (id, data) => {
-  const { angler, weight, location, bait, species, captureTime } = data;
-  let template = ` <div class="catch" data-id="${id}">
-  <label>Angler</label>
-  <input type="text" class="angler" value="${angler}" />
-  <hr />
-  <label>Weight</label>
-  <input type="number" class="weight" value="${weight}" />
-  <hr />
-  <label>Species</label>
-  <input type="text" class="species" value="${species}" />
-  <hr />
-  <label>Location</label>
-  <input type="text" class="location" value="${location}" />
-  <hr />
-  <label>Bait</label>
-  <input type="text" class="bait" value="${bait}" />
-  <hr />
-  <label>Capture Time</label>
-  <input type="number" class="captureTime" value="${captureTime}" />
-  <hr />
-  <button class="update">Update</button>
-  <button class="delete">Delete</button>
-</div>`;
-  Res.catches.innerHTML += template;
+const View = (data, method, id, clearForm, formData) => {
+  const catches = document.getElementById('catches');
+  const handler = {
+    GET: populateData,
+    POST: addCatch,
+    DELETE: deleteCatch,
+    PUT: updateCatch,
+  };
+
+  handler[method](data);
+
+  function createELem(tag, text = '', className = '', attributes = []) {
+    const elem = document.createElement(tag);
+    elem.className = className;
+    attributes.map(e => elem.setAttribute(e[0], e[1]));
+    elem.textContent = text || '';
+    return elem;
+  }
+
+  function addSingleCatch(i, d) {
+    const populate = createELem('div', undefined, 'catch', [['data-id', i]]);
+
+    Object.entries(d).forEach(e => {
+      let type = e[0] !== 'weight' && e[0] !== 'captureTime' ? 'text' : 'number';
+      populate.appendChild(createELem('label', e[0]));
+      populate.appendChild(createELem('input', undefined, e[0], [['type', type],['value', e[1]]])); // prettier-ignore
+      populate.appendChild(document.createElement('hr'));
+    });
+    populate.appendChild(createELem('button', 'Update', 'update'));
+    populate.appendChild(createELem('button', 'Delete', 'delete'));
+    catches.appendChild(populate);
+  }
+
+  function populateData(data) {
+    Array.from(catches.childNodes).map(e => e.remove());
+    Object.entries(data || {}).forEach(e => addSingleCatch(e[0], e[1]));
+  }
+
+  function deleteCatch() {
+    document.querySelector(`div[data-id=${id}]`).remove();
+  }
+
+  function addCatch() {
+    addSingleCatch(id, formData);
+    clearForm();
+  }
+
+  function updateCatch() {}
 };
 export default View;

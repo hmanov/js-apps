@@ -1,18 +1,15 @@
-import Res from '/Res.js';
-import { loadData, addData } from '/Router.js';
+import Request from '/Request.js';
 import View from '/View.js';
+import { addFormData, clearFormData, getBtns, getCatchId, methods } from '/Res.js';
 
-Res.loadBtn.addEventListener('click', async () => {
-  let res = await loadData();
-  Object.entries(res).forEach(e => {
-    View(...e);
-  });
-  Res.attachBtnEvents();
-});
+const attachBtnListeners = () => getBtns().map(e => e.addEventListener('click', handleBtnClick));
+const handleBtnClick = async e => {
+  const elem = e.target;
+  const method = methods[elem.className];
+  const data = elem.getAttribute('data-id') || addFormData();
+  const res = await Request(getCatchId(e), method, data);
+  View(res, method, getCatchId(e), clearFormData, addFormData());
+  attachBtnListeners();
+};
 
-Res.addBtn.addEventListener('click', async () => {
-  let res = await addData(Res.addFormData());
-  console.log(res);
-  View(res.name, Res.addFormData());
-  Res.attachBtnEvents();
-});
+attachBtnListeners();
