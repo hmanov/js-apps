@@ -2,16 +2,16 @@ const View = (id, method, data, formData, resetFromData) => {
   const container = document.getElementsByTagName('tbody')[0];
 
   const creatMyElement = (tag, text) => {
-    let elem = document.createElement(tag);
+    const elem = document.createElement(tag);
     elem.textContent = text;
     return elem;
   };
 
   const addSingleBook = (book = data) => {
-    let tr = creatMyElement('tr');
+    const tr = creatMyElement('tr');
     tr.id = book._id;
     [book.title, book.author, book.isbn].map(e => tr.appendChild(creatMyElement('td', e)));
-    let btnTd = creatMyElement('td');
+    const btnTd = creatMyElement('td');
     btnTd.appendChild(creatMyElement('button', 'Edit'));
     btnTd.appendChild(creatMyElement('button', 'Delete'));
     tr.appendChild(btnTd);

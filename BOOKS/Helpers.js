@@ -2,7 +2,7 @@ const ids = ['title', 'author', 'isbn'];
 export const getBtns = () => [...document.getElementsByTagName('button')];
 
 export const getFormData = () => {
-  let obj = {};
+  const obj = {};
   ids.map(e => (obj[e] = document.getElementById(e).value));
   return obj;
 };

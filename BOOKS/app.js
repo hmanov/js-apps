@@ -8,7 +8,7 @@ const handleClickEvents = async e => {
   const id = btn.parentElement.parentElement.id;
   const methods = { 'load all books': 'GET', edit: 'PUT', delete: 'DELETE', submit: 'POST' };
   const method = methods[btn.textContent.toLowerCase()];
-  let res = await Myfetch(id, method, getFormData());
+  const res = await Myfetch(id, method, getFormData());
   View(id, method, res, getFormData(), resetFormData);
   addListeners();
 };
