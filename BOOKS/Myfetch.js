@@ -9,14 +9,17 @@ const MyFetch = async (id, method, data) => {
   };
   if (method === 'POST' || method === 'PUT') {
     reqObj.headers['Content-type'] = 'application/json';
-    console.log(data);
     reqObj.body = JSON.stringify(data);
   } else if (method !== 'GET') {
     reqObj.body = id;
   }
-  const res = await fetch(url, reqObj);
-  const jsn = await res.json();
-  return jsn;
+  try {
+    const res = await fetch(url, reqObj);
+    const jsn = await res.json();
+    return jsn;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default MyFetch;
